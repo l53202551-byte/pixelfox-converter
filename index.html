@@ -1,0 +1,226 @@
+﻿<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PixelFox Converter — Fast & Private PNG to JPG (Local)</title>
+  <meta name="description" content="Convert PNG to JPG locally in your browser. No uploads, fast, private, and free." />
+  <meta property="og:title" content="PixelFox Converter" />
+  <meta property="og:site_name" content="PixelFox Converter" />
+  <meta property="og:description" content="Fast. Private. Local." />
+  <meta property="og:image" content="https://pixelfox.dev/assets/images/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PixelFox Converter" />
+  <meta name="twitter:description" content="Fast. Private. Local." />
+  <meta name="twitter:image" content="https://pixelfox.dev/assets/images/og.png" />
+  <meta name="theme-color" content="#0e0f13" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/icon-180.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="/assets/images/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/images/favicon-48.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/assets/images/favicon-64.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="glow"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">🦊</div>
+      <div class="brand-text">
+        <div class="brand-title">PixelFox Convert</div>
+        <div class="brand-subtitle">Fast, private file conversion</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="#convert" class="nav-link">Convert</a>
+      <span class="nav-link disabled" aria-disabled="true">Tools</span>
+      <a href="#privacy" class="nav-link">Privacy</a>
+    </nav>
+
+    <div class="top-actions">
+      <div id="offlineBadge" class="offline-badge" hidden>📴 Offline mode</div>
+      <div class="language-picker">
+        <label for="languageSelect" class="sr-only">Language</label>
+        <select id="languageSelect" aria-label="Language selector">
+          <option value="en" selected>English</option>
+          <option value="ru">Русский</option>
+        </select>
+        <span id="languageFlag" class="language-flag" aria-hidden="true">🇬🇧</span>
+      </div>
+      <button id="installBtn" class="btn ghost" hidden>Install app</button>
+      <button id="upgradeBtn" class="btn ghost">Upgrade</button>
+      <button id="themeToggle" class="btn ghost" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="convert">
+      <div class="hero-text">
+        <h1>Convert files instantly. Right in your browser.</h1>
+        <p>No uploads. No tracking. No waiting.</p>
+      </div>
+
+      <section class="card converter" aria-live="polite">
+        <div class="card-head">
+          <div>
+            <h2>PNG to JPG</h2>
+            <p class="muted">Local processing, no server involved.</p>
+          </div>
+        </div>
+
+        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Upload PNG file">
+          <input id="fileInput" type="file" accept="image/png" multiple hidden />
+          <div class="dz-icon">📂</div>
+          <div>
+            <div class="dz-title">Drop your PNG file here</div>
+            <div class="dz-meta">Click to browse. Up to 10 MB.</div>
+          </div>
+          <img id="preview" class="preview" alt="PNG preview" hidden />
+        </div>
+        <div class="queue-panel" id="queuePanel" hidden>
+          <div class="queue-title">Queue</div>
+          <div id="queueList" class="queue-list"></div>
+        </div>
+
+        <div class="file-info" id="fileInfo">
+          <div class="file-name" id="fileName">No file selected</div>
+          <div class="file-meta" id="fileMeta">File size and format will appear here</div>
+        </div>
+        <div class="file-skeleton" id="fileSkeleton" hidden aria-hidden="true">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line short"></div>
+        </div>
+        <div class="result-stats" id="resultStats" hidden></div>
+
+        <div class="settings">
+          <div class="control">
+            <label for="qualityRange">Quality</label>
+            <div class="preset-row">
+              <button type="button" class="preset-btn active" data-quality="0.70">⚡ Fast</button>
+              <button type="button" class="preset-btn" data-quality="0.85">⭐ Balanced</button>
+              <button type="button" class="preset-btn" data-quality="0.95">💎 Max</button>
+            </div>
+            <details class="advanced-quality">
+              <summary>Advanced</summary>
+              <div class="control-row">
+                <input id="qualityRange" type="range" min="0.7" max="0.95" step="0.01" value="0.85" />
+                <span id="qualityValue">85%</span>
+              </div>
+            </details>
+            <div class="control-hint" id="qualityHint">85% - balanced ⭐</div>
+          </div>
+
+          <div class="control">
+            <label for="bgSelect">Background</label>
+            <select id="bgSelect">
+              <option value="white" selected>White (recommended)</option>
+              <option value="black">Black</option>
+            </select>
+            <div class="control-hint">Transparency becomes solid background.</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="convertBtn" class="btn primary" disabled>Convert to JPG</button>
+          <button id="resetBtn" class="btn ghost" disabled>Convert another</button>
+          <a id="downloadLink" class="btn primary" href="#" download hidden>Download JPG</a>
+        </div>
+
+        <div class="state-panel">
+          <div class="state" id="status">Idle</div>
+          <div class="progress" id="progress" hidden>
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="state-note" id="stateNote">Waiting for a PNG file.</div>
+        </div>
+
+        <div class="error" id="error" aria-live="assertive" hidden></div>
+      </section>
+    </section>
+
+    <section class="section" id="privacy">
+      <div class="section-head">
+        <h2>Your files stay yours</h2>
+        <p class="muted">Everything runs locally inside your browser. When the tab closes, it is gone.</p>
+      </div>
+      <div class="pill-grid">
+        <div class="pill">🔒 Files never leave your device</div>
+        <div class="pill">🧠 No analytics or tracking</div>
+        <div class="pill">⚡ Instant processing</div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-head">
+        <h2>About PixelFox Studio</h2>
+        <p class="muted">We build focused tools that feel premium and respect your time.</p>
+      </div>
+      <div class="grid-cards">
+        <div class="card small">
+          <h3>Origin</h3>
+          <p>PixelFox started from a need: conversion tools that do not hijack your data.</p>
+        </div>
+        <div class="card small">
+          <h3>Philosophy</h3>
+          <p>Design that breathes, software that feels reliable, privacy by default.</p>
+        </div>
+        <div class="card small">
+          <h3>Momentum</h3>
+          <p>We scale from a single converter to a focused suite of local tools.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="upgrade">
+      <div class="section-head">
+        <h2>Upgrade plans (soon)</h2>
+        <p class="muted">Built to grow without sacrificing speed or privacy.</p>
+      </div>
+      <div class="grid-cards">
+        <div class="card plan">
+          <div class="plan-title">Free</div>
+          <div class="plan-price">$0</div>
+          <ul class="plan-list">
+            <li>1 file at a time</li>
+            <li>Limited size</li>
+            <li>Core formats</li>
+          </ul>
+          <button class="btn ghost" disabled>Current</button>
+        </div>
+        <div class="card plan highlight">
+          <div class="plan-title">Pro</div>
+          <div class="plan-price">$9</div>
+          <ul class="plan-list">
+            <li>No limits</li>
+            <li>Batch convert</li>
+            <li>No ads</li>
+          </ul>
+          <button class="btn primary" disabled>Notify me</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>PixelFox Converter</span>
+    <span>Built with ❤️ by PixelFox Studio</span>
+    <span>© 2026</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
